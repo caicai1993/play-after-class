@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		/* sin(36°): 0.58778525229247	
+			cos(36°) = 0.80901699437495*/
+			body{
+				background: #000;
+			}
+			p{
+				margin: 0;
+				padding: 0;
+			}
+			.wrap{
+				width: 600px;
+				height: 200px;
+				margin: 250px  auto;
+				perspective: 1200px;
+				transform-style: preserve-3d;
+				perspective-origin: center center -600px ;
+				transition: .5s;
+				/*margin: 0 auto;*/
+				/*border: 1px solid #008000;*/
+			}
+			.box{
+				width: 70px;
+				height: 100px;
+				transform-style: preserve-3d;
+				position: relative;
+				float: left;
+				margin: 0 15px;
+				transition: .6s;
+			}
+			p{
+				width: 58px;
+				height: 98px;
+				border: 1px solid #000000;
+				background: deeppink;
+				opacity: 0.9;
+				transform-origin: top;
+				position: absolute;
+				left: 0;
+				top: 0;
+				border-radius: 10px 10px;
+				font: bold 50px/100px "微软雅黑";
+				text-align: center;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="box">
+				<p>0</p>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+				<p>5</p>
+				<p>6</p>
+				<p>7</p>
+				<p>8</p>
+				<p>9</p>
+			</div>
+			<div class="box">
+				<p>0</p>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+				<p>5</p>
+				<p>6</p>
+				<p>7</p>
+				<p>8</p>
+				<p>9</p>
+			</div>
+			<div class="box">
+				<p>0</p>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+				<p>5</p>
+				<p>6</p>
+				<p>7</p>
+				<p>8</p>
+				<p>9</p>
+			</div>
+			<div class="box">
+				<p>0</p>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+				<p>5</p>
+				<p>6</p>
+				<p>7</p>
+				<p>8</p>
+				<p>9</p>
+			</div>
+			<div class="box">
+				<p>0</p>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+				<p>5</p>
+				<p>6</p>
+				<p>7</p>
+				<p>8</p>
+				<p>9</p>
+			</div>
+			<div class="box">
+				<p>0</p>
+				<p>1</p>
+				<p>2</p>
+				<p>3</p>
+				<p>4</p>
+				<p>5</p>
+				<p>6</p>
+				<p>7</p>
+				<p>8</p>
+				<p>9</p>
+			</div>
+		</div>
+		<script>
+			var wrap = document.getElementsByClassName("wrap")[0];
+			var box = document.getElementsByClassName("box");
+			var otop = 0;//TOP
+			var oZ = 0;//Z轴
+			var x = Math.PI/180;
+			var no = 0;
+			
+			//有点卡顿
+			for(var j=0; j<box.length; j++){
+				var arrP = box[j].getElementsByTagName("p");
+				for(var i=0; i<arrP.length; i++){
+					arrP[i].style.transformOrigin = "top";
+					if(i==0){
+						otop = 0;
+						oZ = 0;
+					}else if(i==1){
+						otop = 100;
+						oZ = 0;
+					}else{
+						otop += parseInt(100*Math.cos((36*(i-1))*x));
+						oZ += parseInt(100*Math.sin((36*(i-1))*x));
+					}
+					arrP[i].style.top = otop+"px";
+					arrP[i].style.left = "0";
+					arrP[i].style.transform = "translateZ(-"+oZ+"px) rotateX(-"+36*i+"deg)";
+				}
+				box[j].style.transformOrigin = "center center -"+153+"px";
+			}
+			
+			function add0(n){
+				return n<10 ? ("0"+n):(n+"");
+			}
+			var speed = 0;
+			setInterval(function(){
+				var nowT = new Date();
+				var h = add0(nowT.getHours());
+				var m = add0(nowT.getMinutes());
+				var s =	add0(nowT.getSeconds());
+				var str = h+m+s;
+				for(var i=0; i<box.length; i++){
+					var num = str.charAt(i);
+					box[i].style.transform = "rotateX("+(num*36)+"deg)";
+				}
+			},1000);	
+			
+			wrap.onmousemove = function(e){
+//				console.log(e.clientX);
+				var tmp = this.getBoundingClientRect().left+parseFloat(this.clientWidth/2);
+				if(e.clientX+200 < tmp){
+					this.style.transform = "rotateY(-60deg)";
+				}else if(e.clientX-200 > tmp){
+					this.style.transform = "rotateY(60deg)";
+				}else{
+					this.style.transform = "rotateY(0deg)";
+				}
+			}
+//			var num = 0;
+//			setInterval(function(){
+//				num+=2;
+//				for(var i=0;i<6;i++){
+//					box[i].style.transform='rotateX('+num+'deg)';
+//				}
+//			},20);
+		</script>
+	</body>
+</html>

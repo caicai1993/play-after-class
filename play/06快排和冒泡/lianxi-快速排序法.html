@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script>
+			var brr = [5,1,2,3,6,7,8,9,1,2];
+			console.log(quickSort(brr));
+			function quickSort(arr){
+				if(arr.length<=1){
+					return arr;
+				}
+				var arrLeft = [];
+				var arrRight = [];
+				var tmp = arr.splice(0,1);//取出第一个数
+				for(var i=0; i<arr.length; i++){
+					if(arr[i]<tmp){
+						arrLeft.push(arr[i]);//小于tmp的
+					}else{
+						arrRight.push(arr[i]);//不小于tmp的
+					}
+				}
+				console.log(arrLeft,tmp, arrRight);
+				return quickSort(arrLeft).concat(tmp ,quickSort(arrRight));
+			}
+		</script>
+	</body>
+</html>

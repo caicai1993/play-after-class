@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style id="mycss">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			.box{
+				position: relative;
+				width: 300px;
+				height: 300px;
+				margin: 100px auto;
+				perspective: 500px;
+			}
+			#wrap1{
+				width: 200px;
+				height: 200px;
+				position: absolute;
+				left: 50px;
+				top: 50px;
+				transform-style: preserve-3d;
+				transform-origin:center center -100px;
+			}
+			#wrap1>li{
+				width: 198px;
+				height: 198px;
+				font: bold 50px/198px "微软雅黑";
+				color: rgba(255,0,0,0.7);
+				text-align: center;
+				position: absolute;
+				border: 1px dashed #000000;
+				/*background: rgba(255,0,0,0.2);*/
+			}
+			#wrap1>li:nth-of-type(1){
+				left: 0; 
+				top: 0;
+				z-index: 3;
+				
+			}
+			#wrap1>li:nth-of-type(2){
+				top: -200px; 
+				left: 0;
+				transform-origin: bottom;
+				transform: rotateX(90deg);
+			}
+			#wrap1>li:nth-of-type(3){
+				left: 200px; 
+				top: 0;
+				transform-origin: left;
+				transform: rotateY(90deg);
+			}
+			#wrap1>li:nth-of-type(4){
+				left: 0; 
+				top: 200px;
+				transform-origin: top;
+				transform: rotateX(-90deg);
+			}
+			#wrap1>li:nth-of-type(5){
+				left: -200px; 
+				top:0;
+				transform-origin: right;
+				transform: rotateY(-90deg);
+			}
+			#wrap1>li:nth-of-type(6){
+				left:0; 
+				top:0;
+				/*transform-origin: center center;*/
+				transform:translateZ(-200px) rotateX(180deg) rotateZ(180deg) ;
+			}
+			
+			#wrap2{
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				left: 100px;
+				top: 100px;
+				transform-style: preserve-3d;
+				transform: translateZ(-50px);
+				transform-origin:center center -50px;
+			}
+			#wrap2>li{
+				width: 98px;
+				height: 98px;
+				font: bold 25px/98px "微软雅黑";
+				color: rgba(0,0,0,0.8);
+				text-align: center;
+				position: absolute;
+				border: 1px dotted paleturquoise;
+			}
+			#wrap2>li:nth-of-type(1){
+				left: 0; 
+				top: 0;
+				z-index: 3;
+				transform-origin: left;
+				background: url(img/01.png) no-repeat;
+				background-size: 98px 98px;
+			}
+			#wrap2>li:nth-of-type(2){
+				top: -100px; 
+				left: 0;
+				transform-origin: bottom;
+				transform: rotateX(90deg);
+				background: url(img/02.png) no-repeat;
+				background-size: 98px 98px;
+			}
+			#wrap2>li:nth-of-type(3){
+				left: 100px; 
+				top: 0;
+				transform-origin: left;
+				transform: rotateY(90deg);
+				background: url(img/03.png) no-repeat;
+				background-size: 98px 98px;
+			}
+			#wrap2>li:nth-of-type(4){
+				left: 0; 
+				top: 100px;
+				transform-origin: top;
+				transform: rotateX(-90deg);
+				background: url(img/04.png) no-repeat;
+				background-size: 98px 98px;
+			}
+			#wrap2>li:nth-of-type(5){
+				left: -100px; 
+				top:0;
+				transform-origin: right;
+				transform: rotateY(-90deg);
+				background: url(img/05.png) no-repeat;
+				background-size: 98px 98px;
+			}
+			#wrap2>li:nth-of-type(6){
+				left:0; 
+				top:0;
+				transform-origin: center center;
+				transform: translateZ(-100px) rotateX(180deg) rotateZ(180deg);
+				background: url(img/06.png) no-repeat;
+				background-size: 98px 98px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<ul id="wrap1">
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+			</ul>
+			<ul id="wrap2">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+		<script>
+			var box = document.getElementsByClassName("box")[0];
+			var wrap1 = document.getElementById("wrap1");
+			var wrap2 = document.getElementById("wrap2");
+			var lis = box.getElementsByTagName("li");
+			var num = 0;
+			var timer = null;
+			timer = setInterval(function(){
+				num++;
+				wrap1.style.transform = "rotateY("+num*4+"deg)";
+				wrap2.style.transform = "rotateY("+num*4+"deg)";
+			},40);
+		</script>
+	</body>
+</html>

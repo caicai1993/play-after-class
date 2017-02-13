@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			.box{
+				width: 600px;
+				height: 500px;
+				border: 1px dashed #5A94EF;
+				margin: 30px auto;
+				background: url(img/0.png) no-repeat;
+				background-size: 600px 500px;
+			}
+			#wrap{
+				width: 600px;
+				height: 500px;
+				border: 1px dashed #5A94EF;
+				background: url(img/1.png) no-repeat;
+				background-size: 600px 500px;
+			}
+			#wrap>li{
+				width: 10px;
+				height: 100%;
+				float: left;
+				opacity: 0;
+				background-size: 600px 500px;
+				transition: .5s ease-in;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<ul id="wrap"></ul>
+		</div>
+		<script>
+			//生成li
+			var oWrap = document.getElementById('wrap');
+			for(var i=0; i<60; i++){
+				var tmp = document.createElement("li");
+				tmp.style.backgroundPositionX = -i*10+"px";
+				oWrap.appendChild(tmp);
+			}
+			
+			var arrLi = oWrap.getElementsByTagName('li');
+			var numli = 0;
+			var numimg = 2;
+			var timer = null;
+			function tab(n){
+				if(arrLi[n-1]){
+					arrLi[n-1].style.opacity = "1";
+				}
+				
+				if(arrLi[n]){
+					arrLi[n].style.opacity = "0";
+					arrLi[n].style.backgroundImage = "url(img/"+numimg+".png)";
+//					oWrap.style.background = "url(img/"+(numimg-1)+".png) no-repeat";
+				}
+			}
+			function show(){
+				timer = setInterval(function(){
+					tab(numli);
+					numli++;
+					if(numli == arrLi.length+1){
+						clearInterval(timer);
+						numimg++;
+						if(numimg == 7){
+							numimg = 1;
+						}
+						numli = 0;
+						setTimeout(show,500);
+					}
+					
+				},80);
+			}
+			show();
+		</script>
+	</body>
+</html>

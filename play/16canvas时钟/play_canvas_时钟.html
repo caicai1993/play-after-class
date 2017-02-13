@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				margin: 0;
+				padding: 0;
+				background: #000;
+			}
+			#can{
+				background: #fff;
+				margin: 50px 0 0 200px;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="can" width="800" height="400"></canvas>
+		<script>
+			var can = document.getElementById("can");
+			var cancot = can.getContext("2d");
+			drow();
+			setInterval(function(){
+				drow();
+			},1000);
+			function drow(){
+				cancot.clearRect(0,0,can.width, can.height);
+				var x = 200;
+				var y = 200;
+				var r = 100;
+				cancot.beginPath();
+				for(var i=0; i<60; i++){//生成分针的刻度
+					cancot.moveTo(x, y);
+					cancot.arc(x, y, r,6*i*Math.PI/180,6*(i+1)*Math.PI/180,false);
+				}
+				cancot.closePath();
+				cancot.stroke();
+				
+				cancot.beginPath();
+				for(var i=0; i<60; i++){//盖上空白
+					cancot.moveTo(x, y);
+					cancot.arc(x, y, r*19/20,6*i*Math.PI/180,6*(i+1)*Math.PI/180,false);
+				}
+				cancot.closePath();
+				cancot.fillStyle = "white";
+				cancot.fill();
+				
+				cancot.beginPath();
+				for(var i=0; i<12; i++){//生成时针的刻度
+					cancot.moveTo(x, y);
+					cancot.arc(x, y, r,30*i*Math.PI/180,30*(i+1)*Math.PI/180,false);
+				}
+				cancot.lineWidth = 3;
+				cancot.closePath();
+				cancot.stroke();
+				
+				cancot.beginPath();
+				for(var i=0; i<12; i++){//盖上空白
+					cancot.moveTo(x, y);
+					cancot.arc(x, y, r*17/20,30*i*Math.PI/180,30*(i+1)*Math.PI/180,false);
+				}
+				cancot.closePath();
+				cancot.fillStyle = "white";
+				cancot.fill();
+				var t = new Date();
+				var h = t.getHours();
+				var m = t.getMinutes();
+				var s = t.getSeconds();
+				h = (-90+h*30+m/2)*Math.PI/180;
+				m = (-90+m*6)*Math.PI/180;
+				s = (-90+s*6)*Math.PI/180;
+				
+				
+				//时针
+				cancot.beginPath();
+				cancot.moveTo(x, y);
+				cancot.arc(x, y, r*13/20,h, h, false);//
+				cancot.lineWidth = 5;
+				cancot.lineJoin = "round";//圆滑一点的指针
+				cancot.closePath();
+				cancot.stroke();
+				//分针
+				cancot.beginPath();
+				cancot.moveTo(x, y);
+				cancot.arc(x, y, r*15/20, m, m,false);//
+				cancot.lineWidth = 3;
+				cancot.lineJoin = "round";
+				cancot.closePath();
+				cancot.stroke();
+				//秒针
+				cancot.beginPath();
+				cancot.moveTo(x, y);
+				cancot.arc(x, y, r*16/20, s, s, false);
+				cancot.lineWidth = 1;
+				cancot.closePath();
+				cancot.stroke();
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background: #000;
+			}
+			div{
+				/*width: 100px;
+				height: 100px;*/
+				border-radius:50%;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function move(obj,attrobj,duration,funcname){//参数分别是：对象、需要改变的属性组成的对象、时间、变换的速度函数、回调函数名
+				var starttime = new Date();//开始时间
+				var d = duration;//从起点到终点，需要运动的时间
+				var j = {};
+				for(var attr in attrobj){
+					j[attr] = {};
+					j[attr].b = parseFloat(getComputedStyle(obj)[attr]);//开始的位置,去掉单位
+					j[attr].c = attrobj[attr] - j[attr].b;//运动的路程：结束位置-开始位置
+				}//建立了一个对象，包含了开始距离和中间运动路程
+//				console.log(j);
+				obj.timer = setInterval(function(){
+					var t = new Date() - starttime ; //已经走过的时间
+					if(t >= d){
+						t = d;
+						clearInterval(obj.timer);
+						funcname&&funcname();
+					}
+					
+					for(var attr in j){
+						var b = j[attr].b;
+						var c = j[attr].c;
+						var v = c*t/d + b;
+						
+						if(attr == "opacity"){
+							obj.style[attr]  = v ;
+						}else{
+							obj.style[attr]  = v + "px";
+						}
+						
+					}
+				},16);
+			}
+			var n=0; 
+			var s=0;
+			var arr = ['#FFA54F','#FA8072','#ADFF2F','#7A67EE','#00BFFF','red'];
+			var arrtmp = [];
+			document.onmousemove = function(e){
+				n++;
+				if(!(n%5)){//控制生成速度
+					for(var i=0; i<3; i++){
+						s++;
+						s %= 6;
+						var m = 1;
+						var oDiv = document.createElement("div");
+						var tmp  = Math.random()*40+25;
+						var sl = e.clientX + (Math.random()-0.5)*80;
+						var st = e.clientY + (Math.random()-0.5)*80;
+//						console.log(st,sl);
+						oDiv.style.width = tmp + "px";
+						oDiv.style.height = tmp + "px";
+						oDiv.style.left = sl + "px";
+						oDiv.style.top = st + "px";
+						oDiv.style.opacity = 1;
+						oDiv.style.transform = "scale(1)";
+						oDiv.style.background = arr[s];
+						document.body.appendChild(oDiv);
+						arrtmp.push(oDiv);
+					}	
+				}
+				
+				if(arrtmp.length >= 1){
+					var t = arrtmp.shift();
+					var tl = parseFloat(getComputedStyle(t).left)+200*(Math.random()-0.5);
+					var tt = parseFloat(getComputedStyle(t).top)+200*(Math.random()-0.5);
+					var timer = null;
+					console.log(getComputedStyle(t).transform);
+					var i = 1;
+					timer = setInterval(function(){
+						i -= 0.05;
+						if(i < 0.1){
+							i = 0.1;
+						}
+						t.style.transform = "scale("+i+")";
+					},60);
+					setTimeout(function(){
+						document.body.removeChild(t);
+						clearInterval(timer);
+					},1000);
+					move(t,{"top":tt,"left":tl},1000,null);	
+				}
+			}
+		</script>
+	</body>
+</html>

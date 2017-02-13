@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			.wrap{
+				width: 560px;
+				height: 250px;
+				position: absolute;
+				left: 400px;
+				top: 150px;
+			}
+			#show{
+				width: 100%;
+				height: 40px;
+				text-align: center;
+				font: bold 30px/40px "微软雅黑";
+				color: yellowgreen;
+			}
+			#show>input{
+				width: 30px;
+				height: 26px;
+			}
+			#week{
+				width: 560px;
+				height: 50px;
+			}
+			#week>li{
+				width: 80px;
+				height: 50px;
+				font: bold 30px/50px "微软雅黑";
+				text-align: center;
+				background: palegoldenrod;
+				float: left;
+			}
+			#date{
+				width: 560px;
+				height: 300px;
+				background: gainsboro;
+			}
+			#date>li{
+				width: 80px;
+				height: 50px;
+				float: left;
+				text-align: center;
+				font: bold 20px/50px "微软雅黑";
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="show">
+				<input type="button" value="◀"/>
+				<span>2016</span>年
+				<span>9</span>月
+				<span>15</span>日
+				<input type="button" value="▶"/>
+			</div>
+			<ul id="week">
+				<li>日</li>
+				<li>一</li>
+				<li>二</li>
+				<li>三</li>
+				<li>四</li>
+				<li>五</li>
+				<li>六</li>
+			</ul>
+			<ul id="date"></ul>
+		</div>
+		<script>
+			var oShow = document.getElementById('show'); 
+			var oInps = oShow.getElementsByTagName("input");
+			var arrSpan = oShow.getElementsByTagName("span");
+			var oDate = document.getElementById('date');
+			var Lis = oDate.getElementsByTagName('li');
+			
+			var num = 0;
+			
+			fnGettime(0);
+			console.log(Lis.length);
+			oInps[0].onclick = function(){
+				num--;
+				fnGettime(num);
+			}
+			oInps[1].onclick = function(){
+				num++;
+				fnGettime(num);
+			}
+		
+			function fnGettime(n){
+				var now = new Date();
+				now.setDate(1);
+//				console.log(now);
+				nowMon = now.getMonth();
+				now.setMonth(nowMon+n);//设置成想要的那个月
+//				console.log(now);
+				var week = now.getDay();//获取第一天是星期几
+				
+				arrSpan[0].innerHTML = now.getFullYear();
+				arrSpan[1].innerHTML = now.getMonth()+1;
+				arrSpan[2].innerHTML = now.getDate();
+				
+				var tmp = now.getMonth()+1;
+				now.setMonth(tmp);//一定要先设置月份再拿到第0天
+				now.setDate(0);//这个月的最后一天就是下个月的第0天
+				var lastday = now.getDate();//获取这个月的最后一天
+				
+				var str = "";
+				for(var i=0; i<week; i++){
+					str += "<li style='opacity: 0;'></li>";
+				}
+				for(var j=week; j<lastday+week; j++){
+					str += "<li>"+(j-week+1)+"</li>";
+				}
+				oDate.innerHTML = str;
+			}
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			ul{
+				width: 635px;
+				height: 600px;
+				margin-left: 360px;
+				margin-top: 40px;
+				border: 5px solid #00FF80;
+				position: relative;
+			}
+			ul>li{
+				width: 136px;
+				height: 180px;
+				float: left;
+				margin: 10px;
+			}
+			ul>li>img{
+				width: 136px;
+				height: 180px;
+			}
+		</style>
+	</head>
+	<body>
+		<ul>
+			<li><img src="beauty/1.jpg"/></li>
+			<li><img src="beauty/2.jpg"/></li>
+			<li><img src="beauty/3.jpg"/></li>
+			<li><img src="beauty/4.jpg"/></li>
+			<li><img src="beauty/a.jpg"/></li>
+			<li><img src="beauty/b.jpg"/></li>
+			<li><img src="beauty/c.jpg"/></li>
+			<li><img src="beauty/d.jpg"/></li>
+			<li><img src="beauty/e.jpg"/></li>
+			<li><img src="beauty/f.jpg"/></li>
+			<li><img src="beauty/g.jpg"/></li>
+			<li><img src="beauty/i.jpg"/></li>
+		</ul>
+		<script>
+			var ul = document.getElementsByTagName("ul")[0];
+			var lis = ul.getElementsByTagName("li");
+			var pos = [];//记录每个li的位置
+			
+			var ind = 1;
+			
+			//转换布局：将浮动布局装，换成定位布局
+			for(var i=0; i<lis.length; i++){
+				pos.push([lis[i].offsetLeft, lis[i].offsetTop]);
+				lis[i].index = i;//初始的索引值
+			}
+			
+			for(var i=0; i<lis.length; i++){
+				lis[i].style.position = "absolute";
+				lis[i].style.left = pos[i][0] + "px";
+				lis[i].style.top = pos[i][1] + "px";
+				
+				drag(i);
+			}
+			
+			//拖拽
+			for(var i=0; i<lis.length ; i++){
+				drag(lis[i]);
+			}
+			function drag(obj){
+				obj.onmousedown = function(ev){
+					var disX = ev.clientX - obj.offsetLeft;
+					var disY = ev.clientY - obj.offsetTop;
+					
+					obj.style.zIndex = ind++;
+					
+					document.onmousemove = function(ev){
+						obj.style.left = ev.clientX - disX + "px";
+						obj.style.top = ev.clientY - disY + "px";
+						
+						for(var i=0; i<lis.length; i++){
+							lis[i].style.border = "";
+						}
+						
+						var nearest = findNear(obj);
+						if(nearest){
+							nearest.style.border = "2px solid red";
+						}
+					}
+					
+					document.onmouseup = function(){
+						document.onmousemove = null;
+						document.onmouseup = null;
+						
+						var nearest = findNear(obj);
+						if(nearest){
+							nearest.style.left = pos[obj.index][0] + "px";
+							nearest.style.top= pos[obj.index][1] + "px";
+							
+							obj.style.left = pos[nearest.index][0] + "px";
+							obj.style.top= pos[nearest.index][1] + "px";
+							
+							var tmp  = obj.index;
+							obj.index = nearest.index;
+							nearest.index = tmp;
+						}else{
+							obj.style.left = pos[obj.index][0] + "px";
+							obj.style.top= pos[obj.index][1] + "px";
+						}
+					}
+					
+					return false;
+				}
+			}
+			
+			function pengzhuang(obj1, obj2){//第一个是本身，第二个是被碰撞的元素；
+				var t1 = obj1.getBoundingClientRect();
+				var t2 = obj2.getBoundingClientRect();//被碰元素
+				
+				if(t2.right<t1.left ||t2.top>t1.bottom || t2.left>t1.right || t2.bottom<t1.top ){
+					return false;
+				}else{
+					return true;
+				}
+			}
+			
+			function findNear(obj){
+				var dis = 9999;//保存的是最小距离
+				var ind = -1;
+				
+				for(var i=0; i<lis.length ;i++){
+					if(lis[i]!=obj && pengzhuang(obj, lis[i])){//排除自身
+						if(findDis(obj, lis[i])< dis){
+							dis = findDis(obj, lis[i]);
+							ind = i;
+						}
+					}
+				}
+				
+				if(ind != -1){
+					return lis[ind];
+				}else{
+					return false;
+				}
+			}
+			function findDis(obj1, obj2){
+				var a = obj1.offsetLeft - obj2.offsetLeft;
+				var b = obj1.offsetTop - obj2.offsetTop;
+				
+				return Math.sqrt(a*a+ b*b);
+			}
+		</script>
+	</body>
+</html>

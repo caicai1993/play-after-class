@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			#box{
+				width: 800px;
+				border: 5px solid #00BFFF;
+				margin: 80px auto;
+				perspective: 300px;
+			}
+			.wrap{
+				width: 800px;
+				height: 360px;
+				perspective: 300px;
+			}
+			.wrap>li{
+				width: 20px;
+				height: 100%;
+				float: left;
+				position: relative;
+				transform-style: preserve-3d;
+				-webkit-transform-origin: center center -180px;//去掉这条代码会有好玩的事情发生
+			}
+			.wrap li a{
+				position: absolute;
+			}
+			.wrap li a:nth-of-type(1){
+				width: 20px;
+				height: 360px;
+				background: url(img/1.png) no-repeat;
+				left: 0;
+				top: 0;
+			}
+			.wrap li a:nth-of-type(2){
+				width: 20px;
+				height: 360px;
+				background: url(img/2.png) no-repeat;
+				left: 0;
+				top: -360px;
+				transform-origin: bottom;
+				transform: rotateX(90deg);
+			}
+			.wrap li a:nth-of-type(3){
+				width: 20px;
+				height: 360px;
+				background: url(img/3.png) no-repeat;
+				left: 0;
+				top: 360px;
+				transform-origin: top;
+				transform: rotateX(-90deg);
+			}
+			.wrap li a:nth-of-type(4){
+				width: 20px;
+				height: 360px;
+				background: url(img/4.png) no-repeat;
+				transform: translateZ(-360px) rotateX(180deg);
+				left: 0;
+				top: 0;
+			}
+			.wrap li span{
+				width: 360px;
+				height: 360px;
+				position: absolute;
+			}
+			.wrap li span:nth-of-type(1){
+				left: 0;
+				top: 0;
+				transform-origin: left;
+				transform: rotateY(90deg);
+			}
+			.wrap li span:nth-of-type(2){
+				right: 0;
+				top: 0;
+				transform-origin: right;
+				transform: rotateY(-90deg);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul class="wrap">
+				<!--<li>
+					<a href="javascript:;"></a>
+					<a href="javascript:;"></a>
+					<a href="javascript:;"></a>
+					<a href="javascript:;"></a>
+					<span></span>
+					<span></span>
+				</li>-->
+			</ul>
+		</div>
+		<script>
+			var oBox = document.getElementById("box");
+			var oWrap = document.getElementsByClassName("wrap")[0];
+			var str = "";
+			var zind = 20;
+			for(var i=0; i<40; i++){
+				if(i >= 20){//层级关系很重要
+					zind--;
+				}
+				str += '<li style="z-index: '+zind+'">';
+				for(var j=0; j<4; j++){
+					str += '<a href="javascript:;" style="background-position: -'+i*20+'px 0px;"></a>';
+				}
+				str += '<span></span><span></span></li>';
+			}
+			oWrap.innerHTML = str;
+			var num = 0;
+			 oBox.onclick = function(){
+			 	num++;
+			 	num %= 5;
+			 	var aLi = document.getElementsByTagName("li");
+				for(var i=0; i<aLi.length; i++){
+					aLi[i].style.transition = "0.7s " + i * 20 + "ms";
+					aLi[i].style.WebkitTransform = "rotateX(-"+num*90+"deg)";
+				}
+			}
+		</script>
+	</body>
+</html>

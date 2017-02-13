@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script>
+			var arr = [4,1,98,20,44,70,5,2,3,59];
+			//优化版本，如果本轮没有进行交换，就不再进行交换了
+			var num = 0;
+			for(var i=0; i<arr.length-1; i++){
+				var onoff = true;
+				for(var j=0; j<arr.length-1-i; j++){
+					num++;
+					if(arr[j]>arr[j+1]){
+						var tmp = arr[j];
+						arr[j] = arr[j+1];
+						arr[j+1] = tmp;
+						onoff = false;
+					}
+				}
+				if(onoff){
+					break;
+				}
+			}
+			console.log(arr);
+			console.log(num);
+			
+			//一般版本
+//			var num=0;
+//			for(var i=0; i<arr.length-1; i++){
+//				for(var j=0; j<arr.length-1-i; j++){
+//					num++;
+//					if(arr[j]>arr[j+1]){
+//						var tmp = arr[j];
+//						arr[j] = arr[j+1];
+//						arr[j+1] = tmp;
+//					}
+//				}
+//			}
+//			console.log(arr);
+//			console.log(num);
+		</script>
+	</body>
+</html>

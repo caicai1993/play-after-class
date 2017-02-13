@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			#box{
+				width: 800px;
+				height: 600px;
+				margin: 50px auto;
+				background: #000;
+				position: relative;
+				background: url(img1/6.jpg) no-repeat;
+				background-size: 800px 600px;
+			}
+			#box>li{
+				width: 300px;
+				height: 70px;
+				border-radius: 10px 10px;
+				position: absolute;
+				left: 400px;
+				top: 275px;
+				transform-origin: 10px 35px; 
+				transition: 1s;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="box">
+		</ul>
+		<script>
+			var oBox = document.getElementById('box');
+			var arrLi = oBox.getElementsByTagName('li');
+			
+			for(var i=0; i<10; i++){
+				var aLi = document.createElement("li");
+				switch(i%10){
+					case 0:aLi.style.background="lightblue"; 	break;
+					case 1:aLi.style.background="lightcyan";	break;
+					case 2:aLi.style.background="lightpink";	break;
+					case 3:aLi.style.background="blueviolet";	break;
+					case 4:aLi.style.background="forestgreen";	break;
+					case 5:aLi.style.background="lightgreen";	break;
+					case 6:aLi.style.background="lightskyblue";	break;
+					case 7:aLi.style.background="lightgoldenrodyellow";break;
+					case 8:aLi.style.background="pink";			break;
+					case 9:aLi.style.background="darkgoldenrod";break;
+				}
+				oBox.appendChild(aLi);
+			}
+			var onoff = true;
+			for(var i=0; i<arrLi.length; i++){
+				arrLi[i].index = i;
+				arrLi[i].onclick = function(){
+					if(this.index == arrLi.length-1 && onoff){
+						showNo();
+						onoff = false;
+					}else if(this.index == arrLi.length-1 && !onoff){
+						showMe();
+						onoff = true;
+					}else{
+						for(var i=0; i<arrLi.length; i++){
+							if(i<this.index){
+								arrLi[i].style.transform = "rotate("+(270+(this.index-i+1)*10)+"deg)";
+							}else if(i==this.index){
+								this.style.transform = "rotate(270deg)";
+							}else{
+								arrLi[i].style.transform = "rotate("+(270-(i-this.index)*14)+"deg)";
+							}
+						}
+					}
+				}
+			}
+			function showMe(){//扇子打开
+				for(var i=0; i<arrLi.length; i++){
+					arrLi[i].style.transform = "rotate("+(360-(i+1)*16)+"deg)";
+				}
+			}
+			function showNo(){//扇子合上
+				for(var i=0; i<arrLi.length; i++){
+					arrLi[i].style.transform = "rotate(0deg)";
+				}
+			}
+			
+			setTimeout(function(){
+				showMe();
+			},200);
+		</script>
+	</body>
+</html>

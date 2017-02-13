@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			li{
+				list-style: none;
+			}
+			#box{
+				width: 800px;
+				height: 600px;
+				border: 5px solid #429400;
+				margin: 20px auto;
+				position: relative;
+			}
+			#box p{
+				width: 18px;
+				height: 18px;
+				/*background: lightgray;*/
+				position: absolute;
+				border: 1px solid darkgray;
+			}
+			#btns{
+				width: 60px;
+				height: 240px;
+				position: absolute;
+				right: 200px;
+				top: 50px;
+			}
+			#btns>input{
+				width: 40px;
+				height: 30px;
+				margin-bottom: 30px;
+			}
+			#box .active{
+				/*border-radius: 50%;*/
+				background: orangered;
+			}
+			#box .show{
+				background: yellow;
+				border-radius: 50%;
+			}
+			#tips{
+				position: absolute;
+				left: 20px;
+				top: 20px;
+				width: 200px;
+				height: 180px;
+				border: 4px solid greenyellow;
+				background: yellowgreen;
+				font: bold 20px/26px "楷体";
+				color: red;
+			}
+			#wrap{
+				width: 800px;
+				height: 600px;
+				background: red;
+				position: absolute;
+				left: 283px;
+				top: 26px;
+				z-index: 100;
+				font: 100px/600px "微软雅黑";
+				color: yellow;
+				text-align: center;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">game over!</div>
+		<div id="box"></div>
+		<!--<div id="btns">
+			<input type="button" value="up"/>
+			<input type="button" value="down"/>
+			<input type="button" value="left"/>
+			<input type="button" value="right"/>
+		</div>-->
+		<div id="tips">
+			tips（游戏规则）:</br>
+			1、不能自己撞自己；</br>
+			2、不能撞墙；</br>
+			3、 在前进的时候不可以点击后退键；</br>
+			4、在向左的时候不能点击向右键</br>
+		</div>
+		<script>
+			var oBox = document.getElementById('box'); 
+			var aP = oBox.getElementsByTagName('p');
+			var oBtn = document.getElementById('btns'); 
+			var oWrap = document.getElementById('wrap'); //遮罩
+			
+//			var aInp = oBtn.getElementsByTagName('input');
+			
+			//生成背景
+			var str = oBox.innerHTML;
+			for(var i=0; i<600; i+=20){
+				for(var j=0; j<800; j+=20){
+					str += "<p style='left:"+j+"px; top:"+i+"px;'></p>";
+				}
+			}
+			oBox.innerHTML = str;
+			
+			function makeSnake(){
+				aP[Snake.shift()].className = "";
+				for(var i=0; i<Snake.length; i++){
+					aP[Snake[i]].className = "active";
+				}
+			}
+			var Snake = [0,1,2,3];//蛇长的数组，蛇的各个部分的位置信息都在里面
+			var stail = Snake[0];//蛇的尾部
+			var shead = Snake[Snake.length-1];
+			var timer = null;//定时器
+			
+			for(var i=0; i<Snake.length; i++){
+				aP[Snake[i]].className = "active";
+			}
+			//检查自己是不是自己撞到自己；返回false,就死了
+			function fnCheck(){
+				var res = true;
+				for(var i=2; i<Snake.length-1; i++){
+					if(shead == Snake[i]){
+						res = false;//撞到自己了
+						break;
+					}
+				}
+				return res;
+			}
+			//生成食物
+			var food = setFood();
+			function setFood(){
+				var i = Math.floor(Math.random()*40*30);//生成的li的序号是：0~1199
+				Snake.forEach(function(a){
+					if(i != a){
+						aP[i].className = "show";
+					}else{
+						setFood();
+					}
+				})
+				return i;
+			}
+			//吃食物，长身体
+			function growbody(){
+				if(shead == food){//位置重合后,占同一个p的位置
+					Snake.unshift(food);
+					console.log(Snake);
+					food = setFood();
+				}
+			}
+			onkeydown = function(event){
+				switch(event.keyCode){
+					case 37: fnLeft(); break; //左
+					case 38: fnUp(); break; //上
+					case 39: fnRight(); break; //右
+					case 40: fnDown(); break; //下
+				}
+			}
+			
+//			aInp[0].onclick = fnUp;
+//			aInp[1].onclick = fnDown;
+//			aInp[2].onclick = fnLeft;
+//			aInp[3].onclick = fnRight;
+			//向上走
+			var t = 250;
+			function fnCuttime(len){
+				if(t != 100){
+					t = 250 - Math.floor(len/5)*50;
+				}
+				return t;
+			}
+			function fnUp(){
+				clearInterval(timer);
+				var speed = fnCuttime(Snake.length);
+				timer = setInterval(function(){
+					if(aP[shead].style.top == "0px"){
+						clearInterval(timer);
+						alert("撞墙了,傻宝宝!");
+						oWrap.style.display = "block";
+					}else{
+						shead -= 40;
+						Snake.push(shead);
+						if(fnCheck()){//没有撞到自己
+							makeSnake();
+							growbody();
+						}else{
+							alert("要调整方向哟！！~");
+							clearInterval(timer);
+						}
+					}
+				},speed);
+			}
+			//向下走
+			function fnDown(){
+				clearInterval(timer);
+				var speed = fnCuttime(Snake.length);
+				timer = setInterval(function(){
+					if(aP[shead].style.top == "580px"){
+						clearInterval(timer);
+						alert("撞墙了,傻宝宝!");
+						oWrap.style.display = "block";
+					}else{
+						shead += 40;
+						Snake.push(shead);
+						if(fnCheck()){//没有撞到自己
+							makeSnake();
+							growbody();
+						}else{
+							alert("要调整方向哟！！~");
+							clearInterval(timer);
+						}
+					}
+				},speed);	
+			}
+			//向左边走
+			function fnLeft(){
+				clearInterval(timer);
+				var speed = fnCuttime(Snake.length);
+				timer = setInterval(function(){
+					if(aP[shead].style.left == "0px"){
+						clearInterval(timer);
+//						alert("撞墙了,傻宝宝!");
+						oWrap.style.display = "block";
+					}else{
+						Snake.push(--shead);
+						if(fnCheck()){//没有撞到自己
+							makeSnake();
+							growbody();
+						}else{
+							alert("要调整方向哟！！~");
+							clearInterval(timer);
+						}
+					}
+				},speed);
+			}
+			//向右边走
+			function fnRight(){
+				clearInterval(timer);
+				var speed = fnCuttime(Snake.length);
+				timer = setInterval(function(){
+					if(aP[shead].style.left == "780px"){
+						clearInterval(timer);
+						alert("撞墙了,傻宝宝!");
+						oWrap.style.display = "block";
+					}else{
+						Snake.push(++shead);
+						if(fnCheck()){//没有撞到自己
+							makeSnake();
+							growbody();
+						}else{
+							alert("要调整方向哟！！~");
+							clearInterval(timer);
+							
+						}
+					}
+				},speed);
+			}
+		</script>
+	</body>
+</html>

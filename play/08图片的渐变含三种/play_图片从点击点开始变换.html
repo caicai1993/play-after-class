@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding:0;
+			}
+			li{
+				list-style: none;
+			}
+			#box{
+				width: 600px;
+				height: 460px;
+				margin: 50px auto;
+				border: 5px dashed palevioletred;
+				position: relative;
+			}
+			#box div{
+				width: 20px;
+				height: 20px;
+				background: pink;
+				float: left;
+				background: url(img/0.png) no-repeat;
+				background-size: 600px 460px;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box"></div>
+		<script>
+			var oBox = document.getElementById('box');
+			var aDiv = oBox.getElementsByTagName('div');
+			var flag = true;
+			var num = 0;
+			var str = "";
+			var imgNum = 1;
+			for(var i=0; i<460; i+=20){//行数
+				for(var j=0; j<600; j+=20){//列数
+					str += "<div style='left:"+ j +"px; top: "+ i +"px;background-position: -"+j+"px -"+i+"px;'></div>";
+				}
+			}
+			oBox.innerHTML = str;
+			var timer = null;
+			function fnchange(n){
+				if(aDiv[n] && aDiv[n].onoff){
+					aDiv[n].style.background = "pink";
+					aDiv[n].onoff = false;
+					num++;
+					if(fnCheck()){
+						imgNum++;
+						aDiv[n].style.background = "url(img/"+imgNum%6+".png) no-repeat";
+					}else{
+						aDiv[n].style.background = "url(img/"+imgNum%6+".png) no-repeat";
+					}
+					aDiv[n].style.backgroundPosition = ""+ (n%30)*-20 +"px "+Math.floor(n/30)*-20+"px";
+					aDiv[n].style.backgroundSize = "600px 460px";
+				}else{
+					return;
+				}
+				setTimeout(function(){//设置了四个函数， 在200毫秒后执行
+					var a = n%30 ? n-1:n;//当这个数是最左边的时候，就不能减了
+					var b = n%30==29 ? n:n+1;//当这个数是最右边边的时候，就不能加了
+					var c = Math.floor(n/29) ? n-30:n;
+					var d = Math.floor(n/29)==22 ? n:n+30;
+					fnchange(a);
+					fnchange(b);
+					fnchange(c);
+					fnchange(d);
+				},200);
+			}
+			function fnCheck(){
+				var i=0;
+				for(; i<aDiv.length; i++){
+					if(aDiv[i].onoff){
+						break;
+					}
+				}
+				if(i == aDiv.length){//全部都被关掉的时候
+					setTimeout(function(){
+						for(i=0; i<aDiv.length; i++){
+							aDiv[i].onoff = true;
+						}
+					},250);
+					return true;
+				}else{
+					return false;
+				}
+			}
+			for(var i=0; i<aDiv.length; i++){
+				aDiv[i].index = i;
+				aDiv[i].onoff = true;
+				aDiv[i].onclick = function(){
+					flag = false;
+					fnchange(this.index);
+				}
+			}
+		</script>
+	</body>
+</html>

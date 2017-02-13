@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			span{
+				font:20px "微软雅黑";
+				color: peru;
+			}
+			div{
+				width: 500px;
+				height: 64px;
+			}
+			strong{
+				font: bold 60px/60px "微软雅黑";
+			}
+			div>em{
+				float: left;
+				width: 64px;
+				height: 64px;
+				background: url(img/sleep.png) no-repeat;
+				background-size: 64px 64px;
+				background-repeat: no-repeat;
+				background-size: 64px 64px;
+				border: 1px solid greenyellow;
+				border-radius: 100%;
+			}
+			.poor{
+				background: url(img/poor.png) no-repeat;
+				background-size : 64px 64px;
+			}
+			.best{
+				background: url(img/best.png) no-repeat;
+				background-size: 64px 64px;
+			}
+		</style>
+	</head>
+	<body>
+		<span>总体评价：</span>
+		<strong>差评</strong>
+		<div id="box">
+			<em></em>
+			<em></em>
+			<em></em>
+			<em></em>
+			<em></em>
+		</div>
+		<script>
+			var oBox = document.getElementById("box");
+			var arrPic = oBox.getElementsByTagName('em');
+			var oStrong = document.getElementsByTagName('strong')[0];
+			var last = -1;
+			function action(){
+				for(var i=0; i<arrPic.length; i++){
+					for(var j=0; j<=last; j++){
+						if(last <=1 ){
+							arrPic[j].className = "poor";
+						}else {
+							arrPic[j].className = "best";
+						}
+					}
+					for(var j=last+1; j<arrPic.length; j++){
+						arrPic[j].className = "";
+					}
+				}	
+			}
+			function info(num){
+				if(num<2){
+					oStrong.innerHTML = "差评";
+					oStrong.style.color = "black";
+				}else if(num<4){
+					oStrong.innerHTML = "中评";
+					oStrong.style.color = "blue";
+				}else{
+					oStrong.innerHTML = "好评";
+					oStrong.style.color = "pink";
+				}
+			}
+			for(var i=0; i<arrPic.length; i++){
+				arrPic[i].index = i;
+				arrPic[i].onoff = true;//true代表没有class
+				//点击
+				arrPic[i].onclick = function(){
+					last = this.index;
+					action();
+					info(this.index);
+				}
+				//鼠标移入
+				arrPic[i].onmouseover = function(){
+					for(var i=0; i<=last; i++){
+						arrPic[i].className = "";
+					}
+					for(var i=0; i<=this.index; i++){
+						if(this.index <=1 ){
+							arrPic[i].className = "poor";
+						}else{
+							arrPic[i].className = "best";
+						}
+					}
+					info(this.index);
+				}
+				//鼠标移出
+				arrPic[i].onmouseout = function(){
+					action();
+					info(last);
+				}
+			}
+		</script>
+	</body>
+</html>

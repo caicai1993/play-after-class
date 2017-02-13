@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.wrap{
+				width: 100%;
+				height: 100%;
+				position: relative;
+			}
+			.wrap>div{
+				width: 6px;
+				height: 8px;
+				background: #000;
+				border-radius: 50% 50%;
+				position: absolute;
+			}
+			#box{
+				width: 100px;
+				height: 100px;
+				background: blue;
+				border-radius: 20% 20%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				transition: .2s;
+			}
+			#head{
+				width: 30px;
+				height: 30px;
+				background: peru;
+				border-radius: 50% 50%;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-left: -15px;
+				margin-top: -15px;
+			}
+			#gun{
+				width: 80px;
+				height: 10px;
+				background: red;
+				border-radius: 6px 6px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-top: -5px;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="box">
+				<div id="head">
+					<div id="gun"></div>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			var box = document.getElementById("box");
+			var gun = document.getElementById("gun");
+			var wrap = document.getElementsByClassName("wrap")[0];
+			var arr = [];
+			document.onkeydown = function(e){
+					arr[e.keyCode] = true;
+					shakehead();
+			}
+			
+			document.onkeyup = function(e){
+				arr[e.keyCode] = false;
+			}
+			var num=0;
+			function shakehead(){
+				if(arr[37]){
+					box.style.transform = 'rotateZ(-180deg)';
+					box.style.left = box.offsetLeft - 10 +"px";
+					num = -2;
+				}
+				if(arr[38]){
+					box.style.transform = 'rotateZ(-90deg)';
+					box.style.top = box.offsetTop - 10 +"px";
+					num = -1;
+				}
+				if(arr[39]){
+					box.style.transform = 'rotateZ(0deg)';
+					box.style.left = box.offsetLeft + 10 +"px";
+					num = 0;
+				}
+				if(arr[40]){
+					box.style.transform = 'rotateZ(90deg)';
+					box.style.top = box.offsetTop + 10 +"px";
+					num = 1;
+				}
+				if(arr[32]){
+					var div = document.createElement("div");
+					wrap.appendChild(div);
+					if(num == -2){//左
+						div.style.left = box.offsetLeft+(50-80)+"px";
+						div.style.top = box.offsetTop + 46 +"px";
+						div.t = setInterval(function(){
+							div.style.left = div.offsetLeft - 5 + "px";
+							if(div.offsetLeft < 10){
+								clearInterval(div.t);
+								wrap.removeChild(div);
+							}
+						},20);         
+					}
+					if(num == -1){//上
+						div.style.left = box.offsetLeft + 50 +"px";
+						div.style.top = box.offsetTop + (50-80) +"px";
+						div.t = setInterval(function(){
+							div.style.top = div.offsetTop - 5 + "px";
+							if(div.offsetTop < 10){
+								clearInterval(div.t);
+								wrap.removeChild(div);
+							}
+						},20);
+					}
+					if(num == 0){//右
+						div.style.left = box.offsetLeft + (50+80) +"px";
+						div.style.top = box.offsetTop + 46 +"px";
+						div.t = setInterval(function(){
+							div.style.left = div.offsetLeft + 5 + "px";
+							if(div.offsetLeft > (window.innerWidth-50)){
+								clearInterval(div.t);
+								wrap.removeChild(div);
+							}
+						},20);
+					}
+					if(num == 1){//下
+						div.style.left = box.offsetLeft +50+"px";
+						div.style.top = box.offsetTop +(50+80)+"px";
+						div.t = setInterval(function(){
+							div.style.top = div.offsetTop + 5 + "px";
+							if(div.offsetTop > (window.innerHeight-50)){
+								clearInterval(div.t);
+								wrap.removeChild(div);
+							}
+						},20);
+					}
+				}	
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#list{
+				width: 500px;
+			}
+			#list>img{
+				width: 500px;
+				height: 700px;
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="list">
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+			<img src="" _src="img/1.jpg"/>
+		</ul>
+		<script>
+			var oList = document.getElementById('list');
+			var arrImg = oList.getElementsByTagName("img");
+			window.onscroll = function(){
+				for(var i=0; i<arrImg.length; i++){
+					if(arrImg[i].getBoundingClientRect().top < document.documentElement.clientHeight-300){
+						var tmp = arrImg[i];
+						tmp.setAttribute('src',tmp.getAttribute('_src'));
+					}
+				}
+				
+			}
+		</script>
+</html>

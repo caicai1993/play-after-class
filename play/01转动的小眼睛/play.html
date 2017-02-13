@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#box{
+				width: 450px;
+				height: 300px;
+				background: url(img/bg.jpg) no-repeat;
+				margin: 50px auto;
+				position: relative;
+			}
+			#box #wrap{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				z-index: 4;
+			}
+			#wrap div{
+				float: left;
+				width: 225px;
+				height: 150px;
+			}
+			#box .eyes{
+				width: 50px;
+				height: 50px;
+				padding: 10px;
+				border: 1px solid palegreen;
+				border-radius: 100%;
+				position: absolute;
+			}
+			.left{
+				transform-origin:0 0;
+				left: 138px;
+				top: 116px;
+				
+			}
+			#lefteye ,#righteye{
+				transform-origin: 25px 25px;
+				transition: 1s;
+			}
+			.right{
+				right: 138px;
+				top: 116px;
+			}
+			.eyes>div{
+				width: 30px;
+				height: 30px;
+				border-radius: 100%;
+				background: #000;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<div id="wrap">
+				<div></div>
+				<div></div>
+				<div style="float:right"></div>
+				<div style="float:right"></div>
+			</div>
+			<div class="eyes left">
+				<div id="lefteye"></div>
+			</div>
+			<div class="eyes right">
+				<div id="righteye"></div>
+			</div>
+		</div>
+		<script>
+			var lefteye = document.getElementById('lefteye');
+			var righteye = document.getElementById('righteye');
+			var wrap = document.getElementById('wrap');
+			var arrDiv = wrap.getElementsByTagName('div');
+			document.onmouseover = function(){
+				for(var i=0; i<arrDiv.length; i++){
+					arrDiv[i].index = i;
+					arrDiv[i].onmouseover = function(){
+						lefteye.style.transform = "rotate("+this.index*90+"deg)";
+						righteye.style.transform = "rotate("+this.index*90+"deg)";
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

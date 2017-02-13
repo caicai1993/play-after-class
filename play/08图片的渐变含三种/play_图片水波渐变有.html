@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#wrap{
+				width: 500px;
+				height: 500px;
+				border: 5px dashed deeppink;
+				margin: 50px auto;
+				position: relative;
+			}
+			#wrap>div{
+				width: 50px;
+				height: 50px;
+				background: red;
+				position: absolute;
+				background: url(img/6.png);
+				background-size: 500px 500px;
+				transition: 0.5s;
+				transform-origin: 0 50px;
+			} 
+		</style>
+	</head>
+	<body>
+		<div id="wrap"></div>
+		<script>
+			var oWrap = document.getElementById('wrap');
+			var aDiv = oWrap.getElementsByTagName('div');
+			var Imgs = ["url(img/0.png)","url(img/1.png)","url(img/2.png)","url(img/3.png)","url(img/4.png)","url(img/5.png)"];
+			var num = 0;
+			//生成图片的div
+			var str = "";
+			for(var i=0; i<500; i+=50){//行数
+				for(var j=0; j<500; j+=50){//列数
+					str += "<div style='top: "+i+"px; left: "+j+"px; background-position:-"+j+"px -"+i+"px;'></div>";
+				}
+			}
+			oWrap.innerHTML = str;
+			//为每个div绑定点击事件处理函数
+			function Check(){
+				var i=0;
+				for(; i<100; i++){
+					if(aDiv[i].onff){
+						break;
+					}
+				}
+				return i==100;//i==aDiv.length的话则全部开关都是false
+			}
+			function fnImg(){
+				for(var i=0; i<aDiv.length; i++){
+					aDiv[i].onoff = true;
+					aDiv[i].style.transform = "rotateZ(360deg)";
+				}
+//				setTimeout(function(){
+//					
+//				},250);
+			}
+			function fnChange(n){
+				if(!aDiv[n] || !aDiv[n].onoff){
+					return;
+				}
+				
+				aDiv[n].onoff = false;
+				aDiv[n].style.transform = "rotateY(360deg)";
+				aDiv[n].style.background = Imgs[num];
+				console.log(num);
+				aDiv[n].style.backgroundPosition = "-"+(n%10)*50+"px -"+Math.floor(n/10)*50+"px";
+				aDiv[n].style.backgroundSize = "500px 500px";
+				
+				setTimeout(function(){
+					if(n%10 == 0){
+						fnChange(n);
+					}else{
+						fnChange(n-1);
+					}
+					if(n%10 == 9){
+						fnChange(n);
+					}else{
+						fnChange(n+1);
+					}
+					fnChange(n-10);
+					fnChange(n+10);
+				},200);
+			}
+			
+			for(var i=0; i<aDiv.length; i++){
+				aDiv[i].onoff = true;
+				aDiv[i].index = i;
+				aDiv[i].onclick = function(){
+					if(Check()){
+						num++;
+						num %= Imgs.length;
+						fnImg();
+						fnChange(this.index);
+					}else{
+						fnChange(this.index);
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
